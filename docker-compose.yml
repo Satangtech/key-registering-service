@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  key-registry-service:
+    image: node:16
+    restart: always
+    command: bash -c "npm i && npx tsc && npm run start"
+    stdin_open: true
+    tty: true
+    working_dir: /app
+    volumes:
+      - ./app:/app
+    ports:
+      - 3000:3000
+      - 9229:9229
