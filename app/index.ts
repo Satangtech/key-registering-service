@@ -16,6 +16,19 @@ enum Status {
   Updating = "updating",
 }
 
+app.get("/v1/status", async (req: Request, res: Response) => {
+  return res.send({
+    updaters: [
+      {
+        address: "address",
+        balance: "address",
+      },
+    ],
+    contract: "contract",
+    network: "network",
+  });
+});
+
 app.get("/v1/validators", async (req: Request, res: Response) => {
   return res.send([
     {
