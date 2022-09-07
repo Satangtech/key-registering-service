@@ -1,9 +1,13 @@
 import express, { Express, Request, Response } from "express";
 import "dotenv/config";
 import cors from "cors";
+import { getBalances } from "./logic";
 
 const PORT = Number(process.env.PORT) || 3000;
 const BIND = process.env.BIND || "0.0.0.0";
+const CONTRACT =
+  process.env.CONTRACT || "8bca024828156b30faddd863664cc125f2c58004";
+const NETWORK = process.env.NETWORK || "regtest";
 
 const app: Express = express();
 app.use(cors());
@@ -17,15 +21,11 @@ enum Status {
 }
 
 app.get("/v1/status", async (req: Request, res: Response) => {
+  const updaters = await getBalances();
   return res.send({
-    updaters: [
-      {
-        address: "address",
-        balance: "address",
-      },
-    ],
-    contract: "contract",
-    network: "network",
+    updaters,
+    contract: CONTRACT,
+    network: NETWORK,
   });
 });
 
