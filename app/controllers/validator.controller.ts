@@ -14,7 +14,14 @@ router.post("/", async (req: Request, res: Response) => {
   try {
     req.body.validatorId = req.body.id;
     delete req.body.id;
-    const validator = DI.validatorRepository.create(req.body);
+    let validator = await DI.validatorRepository.findOne({
+      validatorId: req.body.validatorId,
+    });
+    if (validator) {
+      return res.status(400).json({ message: "Validator already exists" });
+    }
+
+    validator = DI.validatorRepository.create(req.body);
     await DI.validatorRepository.persist(validator).flush();
 
     return res.json({

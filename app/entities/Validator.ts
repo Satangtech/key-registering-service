@@ -13,7 +13,6 @@ export enum Status {
 @Index({ properties: ["validatorId"] })
 export class Validator extends BaseEntity {
   @Property()
-  @Unique()
   validatorId: string;
 
   @Property()
