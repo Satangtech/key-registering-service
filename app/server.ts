@@ -5,9 +5,9 @@ import { getBalances } from "./logic";
 
 const PORT = Number(process.env.PORT) || 3000;
 const BIND = process.env.BIND || "0.0.0.0";
-const CONTRACT =
-  process.env.CONTRACT || "8bca024828156b30faddd863664cc125f2c58004";
-const NETWORK = process.env.NETWORK || "regtest";
+export const CONTRACT = process.env.CONTRACT;
+export const NETWORK = process.env.NETWORK || "regtest";
+export const RPC_URL = process.env.RPC_URL;
 
 const app: Express = express();
 app.use(cors());
