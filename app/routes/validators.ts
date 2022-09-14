@@ -1,25 +1,33 @@
 import { Router, Request, Response } from "express";
-import { Status } from "../models/validator";
+import { Validator } from "../models/validator";
 
 const router = Router();
 
 router.get("/", async (req: Request, res: Response) => {
-  return res.send([
-    {
-      id: "validator1",
-      publickey: "publickey1",
-      status: `${Status.Pending}|${Status.Registered}|${Status.Unregistered}|${Status.Updating}`,
-    },
-  ]);
+  try {
+    const validators = await Validator.find()
+      .sort({ _id: -1 })
+      .select({ _id: 0, __v: 0 });
+    return res.json(validators);
+  } catch (error) {
+    return res.status(500).json({ error: (<any>error).message });
+  }
 });
 
 router.get("/:id", async (req: Request, res: Response) => {
-  const { id } = req.params;
-  return res.send({
-    id,
-    publickey: "publickey1",
-    status: `${Status.Pending}|${Status.Registered}|${Status.Unregistered}|${Status.Updating}`,
-  });
+  try {
+    const { id } = req.params;
+    const validator = await Validator.findOne({ id }).select({
+      _id: 0,
+      __v: 0,
+    });
+    if (!validator) {
+      return res.status(404).json({ error: "Validator not found" });
+    }
+    return res.json(validator);
+  } catch (error) {
+    return res.status(500).json({ error: (<any>error).message });
+  }
 });
 
 export const routerValidators = router;
