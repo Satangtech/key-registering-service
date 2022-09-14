@@ -6,10 +6,7 @@ import { connect } from "mongoose";
 
 const PORT = Number(process.env.PORT) || 3000;
 const BIND = process.env.BIND || "0.0.0.0";
-export const CONTRACT = process.env.CONTRACT;
-export const NETWORK = process.env.NETWORK || "regtest";
-export const RPC_URL = process.env.RPC_URL;
-export const MONGODB_URL = process.env.MONGODB_URL;
+const MONGODB_URL = process.env.MONGODB_URL;
 
 const app: Express = express();
 app.use(cors());

@@ -1,6 +1,6 @@
 import { Router, Request, Response } from "express";
-import { getBalances } from "../logic";
-import { CONTRACT, NETWORK } from "../server";
+import { getBalances } from "../functions";
+import { CONTRACT, NETWORK } from "../functions";
 
 const router = Router();
 
