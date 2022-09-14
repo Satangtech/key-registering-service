@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import { Status } from "../server";
+import { Status } from "../models/validator";
 
 const router = Router();
 
