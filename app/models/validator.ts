@@ -7,6 +7,14 @@ export enum Status {
   Updating = "updating",
 }
 
+export enum ProposalStatus {
+  OnGoing,
+  Cancelled,
+  VerdictPending,
+  ProposalSucceeded,
+  ProposalVotedOut,
+}
+
 interface IValidator {
   id: string;
   publickey: string;

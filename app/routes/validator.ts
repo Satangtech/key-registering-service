@@ -1,4 +1,5 @@
 import { Router, Request, Response } from "express";
+import { sendProposalValidator } from "../functions";
 import { Status, Validator } from "../models/validator";
 
 const router = Router();
@@ -7,6 +8,7 @@ router.post("/", async (req: Request, res: Response) => {
   try {
     const { id, publickey } = req.body;
     const validator = new Validator({ id, publickey });
+    await sendProposalValidator(id, publickey);
     await validator.save();
 
     return res.json({

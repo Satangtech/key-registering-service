@@ -4,6 +4,7 @@ import { getNetwork } from "./utils";
 import "dotenv/config";
 
 import abiMobileValidator from "./abi/mobileValidator.json";
+import { ProposalStatus } from "./models";
 
 const RPC_URL = process.env.RPC_URL;
 export const NETWORK = process.env.NETWORK || "regtest";
@@ -71,7 +72,7 @@ export const getValidatorProposalDetails = async (
   return {
     proposer: details["0"],
     startTime: details["1"],
-    votingStatus: details["2"],
+    votingStatus: ProposalStatus[details["2"]],
     againstVotes: details["3"],
     forVotes: details["4"],
     abstainVotes: details["5"],

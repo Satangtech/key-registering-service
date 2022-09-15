@@ -1,4 +1,5 @@
 import { Router, Request, Response } from "express";
+import { getValidatorProposalDetails } from "../functions";
 import { Validator } from "../models/validator";
 
 const router = Router();
@@ -24,7 +25,11 @@ router.get("/:id", async (req: Request, res: Response) => {
     if (!validator) {
       return res.status(404).json({ error: "Validator not found" });
     }
-    return res.json(validator);
+    const details = await getValidatorProposalDetails(
+      validator.id,
+      validator.publickey
+    );
+    return res.json({ ...validator, details });
   } catch (error) {
     return res.status(500).json({ error: (<any>error).message });
   }
