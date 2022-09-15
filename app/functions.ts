@@ -78,3 +78,13 @@ export const getValidatorProposalDetails = async (
     abstainVotes: details["5"],
   };
 };
+
+export const sendVote = async (id: string, publickey: string, vote: number) => {
+  const account = new PrivkeyAccount(context, privkeys[0]);
+  const validatorProposalID = getValidatorProposalId(id, publickey);
+  const contractMobileValidator = getContractMobileValidator();
+  const txid = await contractMobileValidator.methods
+    .vote(validatorProposalID, vote)
+    .send({ from: account });
+  return txid;
+};
