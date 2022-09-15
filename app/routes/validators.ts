@@ -1,6 +1,6 @@
 import { Router, Request, Response } from "express";
 import { getValidatorProposalDetails } from "../functions";
-import { Validator } from "../models/validator";
+import { Validator } from "../models";
 
 const router = Router();
 
