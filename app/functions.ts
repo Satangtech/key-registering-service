@@ -88,3 +88,21 @@ export const sendVote = async (id: string, publickey: string, vote: number) => {
     .send({ from: account });
   return txid;
 };
+
+export const banValidator = async (id: string) => {
+  const account = new PrivkeyAccount(context, privkeys[0]);
+  const contractMobileValidator = getContractMobileValidator();
+  const txid = await contractMobileValidator.methods
+    .banValidator(id)
+    .send({ from: account });
+  return txid;
+};
+
+export const unbanValidator = async (id: string) => {
+  const account = new PrivkeyAccount(context, privkeys[0]);
+  const contractMobileValidator = getContractMobileValidator();
+  const txid = await contractMobileValidator.methods
+    .unbanValidator(id)
+    .send({ from: account });
+  return txid;
+};
