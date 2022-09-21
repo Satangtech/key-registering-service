@@ -7,6 +7,7 @@ import {
   unbanValidator,
 } from "../functions";
 import { Status, Validator } from "../models";
+import { getStatusFromProposal } from "../utils";
 
 const router = Router();
 
@@ -15,6 +16,13 @@ router.get("/", async (req: Request, res: Response) => {
     const validators = await Validator.find()
       .sort({ _id: -1 })
       .select({ _id: 0, __v: 0 });
+    validators.map(async ({ id, publickey, status }) => {
+      const details = await getValidatorProposalDetails(id, publickey);
+      const newStatus = getStatusFromProposal(details.votingStatus);
+      if (newStatus !== status) {
+        await Validator.findOneAndUpdate({ id }, { status: newStatus });
+      }
+    });
     return res.json(validators);
   } catch (error) {
     return res.status(500).json({ error: (<any>error).message });
@@ -35,7 +43,11 @@ router.get("/:id", async (req: Request, res: Response) => {
       validator.id,
       validator.publickey
     );
-    return res.json({ ...validator, details });
+    const newStatus = getStatusFromProposal(details.votingStatus);
+    if (newStatus !== validator.status) {
+      await Validator.findOneAndUpdate({ id }, { status: newStatus });
+    }
+    return res.json(validator);
   } catch (error) {
     return res.status(500).json({ error: (<any>error).message });
   }
