@@ -7,7 +7,7 @@ import {
   sendProposalValidator,
   unbanValidator,
 } from "../functions";
-import { Status, Validator } from "../models";
+import { Status, updateValidatorStatus, Validator } from "../models";
 
 const router = Router();
 
@@ -18,15 +18,7 @@ router.get("/", async (req: Request, res: Response) => {
       .select({ _id: 0, __v: 0 });
     validators.map(async ({ id, status, publickey }) => {
       const baned = await isBanned(id);
-      let newStatus = status;
-      if (baned && status !== Status.Baned) {
-        newStatus = Status.Baned;
-      } else if (!baned && status === Status.Baned) {
-        newStatus = Status.Registered;
-      }
-      if (newStatus !== status) {
-        await Validator.findOneAndUpdate({ id }, { status: newStatus });
-      }
+      const newStatus = updateValidatorStatus(id, status, baned);
       return {
         id,
         status: newStatus,
@@ -54,15 +46,7 @@ router.get("/:id", async (req: Request, res: Response) => {
       validator.publickey
     );
     const baned = await isBanned(id);
-    let newStatus = validator.status;
-    if (baned && validator.status !== Status.Baned) {
-      newStatus = Status.Baned;
-    } else if (!baned && validator.status === Status.Baned) {
-      newStatus = Status.Registered;
-    }
-    if (newStatus !== validator.status) {
-      await Validator.findOneAndUpdate({ id }, { status: newStatus });
-    }
+    const newStatus = updateValidatorStatus(id, validator.status, baned);
     return res.json({ ...validator, status: newStatus, details });
   } catch (error) {
     return res.status(500).json({ error: (<any>error).message });
