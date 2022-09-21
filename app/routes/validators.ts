@@ -1,11 +1,12 @@
-import { Router, Request, Response } from "express";
+import { Request, Response, Router } from "express";
 import {
+  banValidator,
+  deleteProposal,
   getValidatorProposalDetails,
   sendProposalValidator,
-  sendVote,
+  unbanValidator,
 } from "../functions";
-import { ProposalStatus, Status, Validator } from "../models";
-import { getVote } from "../utils";
+import { Status, Validator } from "../models";
 
 const router = Router();
 
@@ -43,8 +44,12 @@ router.get("/:id", async (req: Request, res: Response) => {
 router.post("/", async (req: Request, res: Response) => {
   try {
     const { id, publickey } = req.body;
-    const validator = new Validator({ id, publickey });
     const txid = await sendProposalValidator(id, publickey);
+    const validator = new Validator({
+      id,
+      publickey,
+      status: Status.Registered,
+    });
     await validator.save();
 
     return res.json({
@@ -62,25 +67,52 @@ router.put("/:id", async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const { publickey, status } = req.body;
-    const vote = getVote(status);
-    const txid = await sendVote(id, publickey, vote);
-    const details = await getValidatorProposalDetails(id, publickey);
+    let result;
 
-    if (details.votingStatus === ProposalStatus["3"]) {
+    if (status === "ban") {
+      const txid = await banValidator(id);
+      await Validator.updateOne({ id }, { publickey, status: Status.Baned });
+      result = {
+        id,
+        publickey,
+        status: Status.Baned,
+        txid,
+      };
+    } else if (status === "unban") {
+      const txid = await unbanValidator(id);
       await Validator.updateOne(
         { id },
         { publickey, status: Status.Registered }
       );
-    } else if (details.votingStatus === ProposalStatus["4"]) {
-      await Validator.updateOne(
-        { id },
-        { publickey, status: Status.Unregistered }
-      );
+      result = {
+        id,
+        publickey,
+        status: Status.Registered,
+        txid,
+      };
+    } else {
+      return res.status(400).json({ error: "Invalid status" });
     }
+    return res.json(result);
+  } catch (error) {
+    return res.status(500).json({ error: (<any>error).message });
+  }
+});
+
+router.delete("/:id", async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const validator = await Validator.findOne({ id });
+    if (!validator) {
+      return res.status(404).json({ error: "Validator not found" });
+    }
+    const txid = await deleteProposal(validator.id, validator.publickey);
+    await Validator.deleteOne({ id });
 
     return res.json({
-      publickey,
-      status: Status.Updating,
+      id,
+      publickey: validator.publickey,
+      status: "deleted",
       txid,
     });
   } catch (error) {
