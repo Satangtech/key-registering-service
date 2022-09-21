@@ -1,7 +1,7 @@
-import { RPCClient, Context, PrivkeyAccount, Client } from "firovm-sdk";
+import "dotenv/config";
+import { Client, Context, PrivkeyAccount, RPCClient } from "firovm-sdk";
 import { privkeys } from "./privkey";
 import { getNetwork } from "./utils";
-import "dotenv/config";
 
 import abiMobileValidator from "./abi/mobileValidator.json";
 import { ProposalStatus } from "./models";
@@ -103,6 +103,16 @@ export const unbanValidator = async (id: string) => {
   const contractMobileValidator = getContractMobileValidator();
   const txid = await contractMobileValidator.methods
     .unbanValidator(id)
+    .send({ from: account });
+  return txid;
+};
+
+export const deleteProposal = async (id: string, publickey: string) => {
+  const account = new PrivkeyAccount(context, privkeys[0]);
+  const validatorProposalID = getValidatorProposalId(id, publickey);
+  const contractMobileValidator = getContractMobileValidator();
+  const txid = await contractMobileValidator.methods
+    .deleteProposal(validatorProposalID)
     .send({ from: account });
   return txid;
 };
