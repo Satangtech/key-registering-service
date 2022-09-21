@@ -1,4 +1,5 @@
 import { Network } from "firovm-sdk";
+import { ProposalStatus, Status } from "./models";
 
 export const getVote = (status: string) => {
   // 0 => Abstain
@@ -24,5 +25,22 @@ export const getNetwork = (network: string): Network => {
       return Network.Mainnet;
     default:
       throw new Error("Invalid network");
+  }
+};
+
+export const getStatusFromProposal = (status: string) => {
+  switch (status) {
+    case ProposalStatus["0"]:
+      return Status.Pending;
+    case ProposalStatus["1"]:
+      return Status.Unregistered;
+    case ProposalStatus["2"]:
+      return Status.Pending;
+    case ProposalStatus["3"]:
+      return Status.Registered;
+    case ProposalStatus["4"]:
+      return Status.Unregistered;
+    default:
+      return Status.Pending;
   }
 };
