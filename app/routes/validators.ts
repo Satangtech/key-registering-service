@@ -16,7 +16,7 @@ router.get("/", async (req: Request, res: Response) => {
     const validators = await Validator.find()
       .sort({ _id: -1 })
       .select({ _id: 0, __v: 0 });
-    validators.map(async ({ id, status, publickey }) => {
+    const result = validators.map(async ({ id, status, publickey }) => {
       const baned = await isBanned(id);
       const newStatus = updateValidatorStatus(id, status, baned);
       return {
@@ -25,7 +25,7 @@ router.get("/", async (req: Request, res: Response) => {
         publickey,
       };
     });
-    return res.json(validators);
+    return res.json(result);
   } catch (error) {
     return res.status(500).json({ error: (<any>error).message });
   }
