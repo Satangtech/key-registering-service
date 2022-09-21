@@ -1,10 +1,11 @@
-import { Schema, model } from "mongoose";
+import { model, Schema } from "mongoose";
 
 export enum Status {
   Pending = "pending",
   Registered = "registered",
   Unregistered = "unregistered",
   Updating = "updating",
+  Baned = "baned",
 }
 
 export enum ProposalStatus {
