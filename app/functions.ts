@@ -116,3 +116,9 @@ export const deleteProposal = async (id: string, publickey: string) => {
     .send({ from: account });
   return txid;
 };
+
+export const isBanned = async (id: string): Promise<boolean> => {
+  const contractMobileValidator = getContractMobileValidator();
+  const isBanned = await contractMobileValidator.methods.isBanned(id).call();
+  return isBanned;
+};
