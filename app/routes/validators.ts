@@ -16,13 +16,22 @@ router.get("/", async (req: Request, res: Response) => {
     const validators = await Validator.find()
       .sort({ _id: -1 })
       .select({ _id: 0, __v: 0 });
-    validators.map(async ({ id, status }) => {
+    validators.map(async ({ id, status, publickey }) => {
       const baned = await isBanned(id);
+      let newStatus = status;
       if (baned && status !== Status.Baned) {
-        await Validator.findOneAndUpdate({ id }, { status: Status.Baned });
+        newStatus = Status.Baned;
       } else if (!baned && status === Status.Baned) {
-        await Validator.findOneAndUpdate({ id }, { status: Status.Registered });
+        newStatus = Status.Registered;
       }
+      if (newStatus !== status) {
+        await Validator.findOneAndUpdate({ id }, { status: newStatus });
+      }
+      return {
+        id,
+        status: newStatus,
+        publickey,
+      };
     });
     return res.json(validators);
   } catch (error) {
@@ -45,12 +54,16 @@ router.get("/:id", async (req: Request, res: Response) => {
       validator.publickey
     );
     const baned = await isBanned(id);
+    let newStatus = validator.status;
     if (baned && validator.status !== Status.Baned) {
-      await Validator.findOneAndUpdate({ id }, { status: Status.Baned });
+      newStatus = Status.Baned;
     } else if (!baned && validator.status === Status.Baned) {
-      await Validator.findOneAndUpdate({ id }, { status: Status.Registered });
+      newStatus = Status.Registered;
     }
-    return res.json({ ...validator, details });
+    if (newStatus !== validator.status) {
+      await Validator.findOneAndUpdate({ id }, { status: newStatus });
+    }
+    return res.json({ ...validator, status: newStatus, details });
   } catch (error) {
     return res.status(500).json({ error: (<any>error).message });
   }
