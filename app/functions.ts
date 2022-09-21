@@ -92,8 +92,9 @@ export const sendVote = async (id: string, publickey: string, vote: number) => {
 export const banValidator = async (id: string) => {
   const account = new PrivkeyAccount(context, privkeys[0]);
   const contractMobileValidator = getContractMobileValidator();
+  const { idHex } = getHexIdAndBytesPubkey(id, "");
   const txid = await contractMobileValidator.methods
-    .banValidator(id)
+    .banValidator(idHex)
     .send({ from: account });
   return txid;
 };
@@ -101,8 +102,9 @@ export const banValidator = async (id: string) => {
 export const unbanValidator = async (id: string) => {
   const account = new PrivkeyAccount(context, privkeys[0]);
   const contractMobileValidator = getContractMobileValidator();
+  const { idHex } = getHexIdAndBytesPubkey(id, "");
   const txid = await contractMobileValidator.methods
-    .unbanValidator(id)
+    .unbanValidator(idHex)
     .send({ from: account });
   return txid;
 };
@@ -119,6 +121,7 @@ export const deleteProposal = async (id: string, publickey: string) => {
 
 export const isBanned = async (id: string): Promise<boolean> => {
   const contractMobileValidator = getContractMobileValidator();
-  const isBanned = await contractMobileValidator.methods.isBanned(id).call();
-  return isBanned;
+  const { idHex } = getHexIdAndBytesPubkey(id, "");
+  const isBanned = await contractMobileValidator.methods.isBanned(idHex).call();
+  return isBanned["0"];
 };

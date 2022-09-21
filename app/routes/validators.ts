@@ -16,15 +16,17 @@ router.get("/", async (req: Request, res: Response) => {
     const validators = await Validator.find()
       .sort({ _id: -1 })
       .select({ _id: 0, __v: 0 });
-    const result = validators.map(async ({ id, status, publickey }) => {
-      const baned = await isBanned(id);
-      const newStatus = updateValidatorStatus(id, status, baned);
-      return {
-        id,
-        status: newStatus,
-        publickey,
-      };
-    });
+    const result = await Promise.all(
+      validators.map(async ({ id, status, publickey }) => {
+        const baned = await isBanned(id);
+        const newStatus = await updateValidatorStatus(id, status, baned);
+        return {
+          id,
+          status: newStatus,
+          publickey,
+        };
+      })
+    );
     return res.json(result);
   } catch (error) {
     return res.status(500).json({ error: (<any>error).message });
@@ -41,13 +43,11 @@ router.get("/:id", async (req: Request, res: Response) => {
     if (!validator) {
       return res.status(404).json({ error: "Validator not found" });
     }
-    const details = await getValidatorProposalDetails(
-      validator.id,
-      validator.publickey
-    );
+    const { publickey, status } = validator;
+    const details = await getValidatorProposalDetails(id, publickey);
     const baned = await isBanned(id);
-    const newStatus = updateValidatorStatus(id, validator.status, baned);
-    return res.json({ ...validator, status: newStatus, details });
+    const newStatus = await updateValidatorStatus(id, status, baned);
+    return res.json({ id, publickey, status: newStatus, details });
   } catch (error) {
     return res.status(500).json({ error: (<any>error).message });
   }
@@ -83,7 +83,10 @@ router.put("/:id", async (req: Request, res: Response) => {
 
     if (status === "ban") {
       const txid = await banValidator(id);
-      await Validator.updateOne({ id }, { publickey, status: Status.Baned });
+      await Validator.findOneAndUpdate(
+        { id },
+        { publickey, status: Status.Baned }
+      );
       result = {
         id,
         publickey,
@@ -92,7 +95,7 @@ router.put("/:id", async (req: Request, res: Response) => {
       };
     } else if (status === "unban") {
       const txid = await unbanValidator(id);
-      await Validator.updateOne(
+      await Validator.findOneAndUpdate(
         { id },
         { publickey, status: Status.Registered }
       );
