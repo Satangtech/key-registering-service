@@ -1,7 +1,6 @@
 import { Request, Response, Router } from "express";
 import {
   banValidator,
-  deleteProposal,
   getValidatorProposalDetails,
   isBanned,
   sendProposalValidator,
@@ -78,37 +77,24 @@ router.post("/", async (req: Request, res: Response) => {
 router.put("/:id", async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { publickey, status } = req.body;
-    let result;
+    const { publickey, banned } = req.body;
+    let status, txid;
 
-    if (status === "ban") {
-      const txid = await banValidator(id);
-      await Validator.findOneAndUpdate(
-        { id },
-        { publickey, status: Status.Baned }
-      );
-      result = {
-        id,
-        publickey,
-        status: Status.Baned,
-        txid,
-      };
-    } else if (status === "unban") {
-      const txid = await unbanValidator(id);
-      await Validator.findOneAndUpdate(
-        { id },
-        { publickey, status: Status.Registered }
-      );
-      result = {
-        id,
-        publickey,
-        status: Status.Registered,
-        txid,
-      };
+    if (banned) {
+      txid = await banValidator(id);
+      status = Status.Baned;
     } else {
-      return res.status(400).json({ error: "Invalid status" });
+      txid = await unbanValidator(id);
+      status = Status.Registered;
     }
-    return res.json(result);
+
+    await Validator.findOneAndUpdate({ id }, { publickey, status });
+    return res.json({
+      id,
+      publickey,
+      status,
+      txid,
+    });
   } catch (error) {
     return res.status(500).json({ error: (<any>error).message });
   }
@@ -121,14 +107,12 @@ router.delete("/:id", async (req: Request, res: Response) => {
     if (!validator) {
       return res.status(404).json({ error: "Validator not found" });
     }
-    const txid = await deleteProposal(validator.id, validator.publickey);
-    await Validator.deleteOne({ id });
 
     return res.json({
       id,
       publickey: validator.publickey,
       status: "deleted",
-      txid,
+      msg: "API for deleting validator is not implemented yet",
     });
   } catch (error) {
     return res.status(500).json({ error: (<any>error).message });
