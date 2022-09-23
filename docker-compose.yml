@@ -13,3 +13,13 @@ services:
     ports:
       - 3000:3000
       - 9229:9229
+    depends_on:
+      - mongo
+
+  mongo:
+    container_name: mongo
+    image: mongo:5.0
+    ports:
+      - 27017:27017
+    volumes:
+      - ./.mongo:/data/db
