@@ -27,7 +27,7 @@ export const getBalances = async () => {
 
 export const getHexIdAndBytesPubkey = (id: string, publickey: string) => {
   const idHex = client.web3.utils.asciiToHex(id);
-  const pubkeyBytes = Uint8Array.from(Buffer.from(`0x${publickey}`, "hex"));
+  const pubkeyBytes = Buffer.from(publickey, "hex");
   return { idHex, pubkeyBytes };
 };
 
