@@ -1,8 +1,8 @@
-import express, { Express } from "express";
-import "dotenv/config";
 import cors from "cors";
-import { routerStatus, routerValidators } from "./routes";
+import "dotenv/config";
+import express, { Express } from "express";
 import { connect } from "mongoose";
+import { routerStatus, routerValidators } from "./routes";
 
 const PORT = Number(process.env.PORT) || 3000;
 const BIND = process.env.BIND || "0.0.0.0";
