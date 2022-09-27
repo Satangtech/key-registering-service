@@ -63,7 +63,7 @@ router.post("/", async (req: Request, res: Response) => {
     });
     await validator.save();
 
-    return res.json({
+    return res.status(201).json({
       id: validator.id,
       publickey: validator.publickey,
       status: Status.Pending,
