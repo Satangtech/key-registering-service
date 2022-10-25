@@ -79,6 +79,9 @@ router.put("/:id", async (req: Request, res: Response) => {
     const { id } = req.params;
     const { publickey, banned } = req.body;
     let status, txid;
+    if (id === undefined || banned === undefined) {
+      return res.status(400).json({ error: "Id and banned is required!" });
+    }
 
     if (banned) {
       txid = await banValidator(id);
