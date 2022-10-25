@@ -82,7 +82,7 @@ router.put("/:id", async (req: Request, res: Response) => {
 
     if (banned) {
       txid = await banValidator(id);
-      status = Status.Baned;
+      status = Status.Banned;
     } else {
       txid = await unbanValidator(id);
       status = Status.Registered;

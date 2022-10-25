@@ -149,7 +149,7 @@ describe("Test API", () => {
       id: "id1",
       publickey:
         "0267d932bb682d97a0ffcd7205bd5c7d0edcc2733b29f6747fd5a0f06e5b1ddbac",
-      status: "baned",
+      status: "banned",
       txid: "d13fa5c7c608bec8f6a393876e5da8d1109f28b741207141747e1b4237e7a03d",
     });
 
@@ -159,7 +159,7 @@ describe("Test API", () => {
       id: "id1",
       publickey:
         "0267d932bb682d97a0ffcd7205bd5c7d0edcc2733b29f6747fd5a0f06e5b1ddbac",
-      status: "baned",
+      status: "banned",
       details: {
         proposer: "0x346f0BBbc6B4FfEdf2E7F18D7bA5265748663C17",
         startTime: "1664188422",

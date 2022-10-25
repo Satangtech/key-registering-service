@@ -5,7 +5,7 @@ export enum Status {
   Registered = "registered",
   Unregistered = "unregistered",
   Updating = "updating",
-  Baned = "baned",
+  Banned = "banned",
 }
 
 export enum ProposalStatus {
@@ -35,12 +35,12 @@ const validatorSchema = new Schema<IValidator>({
 export const updateValidatorStatus = async (
   id: string,
   status: Status,
-  baned: boolean
+  banned: boolean
 ) => {
   let newStatus = status;
-  if (baned && status !== Status.Baned) {
-    newStatus = Status.Baned;
-  } else if (!baned && status === Status.Baned) {
+  if (banned && status !== Status.Banned) {
+    newStatus = Status.Banned;
+  } else if (!banned && status === Status.Banned) {
     newStatus = Status.Registered;
   }
   if (newStatus !== status) {
