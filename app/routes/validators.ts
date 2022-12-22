@@ -59,7 +59,6 @@ router.post("/", async (req: Request, res: Response) => {
       _id: 0,
       __v: 0,
     });
-
     if (checkId) {
       return res.status(400).json({ error: `Duplicate id ${id}` });
     }
