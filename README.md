@@ -21,7 +21,7 @@
 
     - `RPC_URL` : URI of RPC node
 
-    - `MONGODB_URL, MONGODB_URL_TEST` : URI of MongoDB and MongoDB for test
+    - `MONGODB_URL` : URI of MongoDB
 
     File `privkey.ts`
 
@@ -36,5 +36,5 @@
 - Run Test
 
   ```bash
-  docker compose exec key-registry-service npm test
+  docker compose exec key-registry-service bash -c "MONGODB_URL_TEST=mongodb://mongo:27017/key-register-test npm test"
   ```
