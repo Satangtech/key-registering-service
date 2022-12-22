@@ -1,6 +1,5 @@
-import { Router, Request, Response } from "express";
-import { getBalances } from "../functions";
-import { CONTRACT, NETWORK } from "../functions";
+import { Request, Response, Router } from "express";
+import { CONTRACT, getBalances, NETWORK } from "../functions";
 
 const router = Router();
 

@@ -55,6 +55,23 @@ router.get("/:id", async (req: Request, res: Response) => {
 router.post("/", async (req: Request, res: Response) => {
   try {
     const { id, publickey } = req.body;
+    const checkId = await Validator.findOne({ id }).select({
+      _id: 0,
+      __v: 0,
+    });
+    if (checkId) {
+      return res.status(400).json({ error: `Duplicate id ${id}` });
+    }
+    const checkPubkey = await Validator.findOne({ publickey }).select({
+      _id: 0,
+      __v: 0,
+    });
+    if (checkPubkey) {
+      return res
+        .status(400)
+        .json({ error: `Duplicate publickey ${publickey}` });
+    }
+
     const txid = await sendProposalValidator(id, publickey);
     const validator = new Validator({
       id,
@@ -63,7 +80,7 @@ router.post("/", async (req: Request, res: Response) => {
     });
     await validator.save();
 
-    return res.json({
+    return res.status(201).json({
       id: validator.id,
       publickey: validator.publickey,
       status: Status.Pending,
@@ -79,10 +96,13 @@ router.put("/:id", async (req: Request, res: Response) => {
     const { id } = req.params;
     const { publickey, banned } = req.body;
     let status, txid;
+    if (id === undefined || banned === undefined) {
+      return res.status(400).json({ error: "Id and banned is required!" });
+    }
 
     if (banned) {
       txid = await banValidator(id);
-      status = Status.Baned;
+      status = Status.Banned;
     } else {
       txid = await unbanValidator(id);
       status = Status.Registered;
