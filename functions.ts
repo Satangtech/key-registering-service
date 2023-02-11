@@ -1,10 +1,9 @@
 import "dotenv/config";
 import { Client, Context, PrivkeyAccount, RPCClient } from "firovm-sdk";
+import { abi } from "./abi/mobileValidator";
+import { ProposalStatus } from "./models";
 import { privkeys } from "./privkey";
 import { getNetwork } from "./utils";
-
-import abiMobileValidator from "./abi/mobileValidator.json";
-import { ProposalStatus } from "./models";
 
 const RPC_URL = process.env.RPC_URL;
 export const NETWORK = process.env.NETWORK || "regtest";
@@ -44,7 +43,7 @@ export const getValidatorProposalId = (
 };
 
 export const getContractMobileValidator = () => {
-  return new client.Contract(abiMobileValidator, CONTRACT!);
+  return new client.Contract(abi, CONTRACT!);
 };
 
 export const sendProposalValidator = async (

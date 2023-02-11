@@ -1,6 +1,6 @@
 # key-registering-service
 
-- Create file and correct data `app/.env` and `app/privkey.ts`
+- Create file and correct data `.env` and `privkey.ts`
 
   - Copy file example
 

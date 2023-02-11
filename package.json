@@ -7,6 +7,10 @@
     "build": "npx tsc",
     "start": "node dist/server.js",
     "test": "jest",
+    "test:logs": "docker compose -f docker-compose.test.yml logs -f key-regis",
+    "test:up": "docker compose -f docker-compose.test.yml up -d key-regis --build && npm run test:logs",
+    "test:it": "docker compose -f docker-compose.test.yml up it-test",
+    "test:down": "docker compose -f docker-compose.test.yml down",
     "debug": "node --trace-warnings --inspect-brk=0.0.0.0:9229 dist/server.js --DEBUG true",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\""
   },
@@ -17,7 +21,7 @@
     "cors": "^2.8.5",
     "express": "^4.18.1",
     "express-basic-auth": "^1.2.1",
-    "firovm-sdk": "0.0.6-alpha",
+    "firovm-sdk": "0.0.12-alpha",
     "mongoose": "^6.6.0"
   },
   "devDependencies": {

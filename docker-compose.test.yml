@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+
+  key-regis:
+    build: .
+    stdin_open: true
+    tty: true
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:5
+
+  it-test:
+    build: .
+    stdin_open: true
+    tty: true
+    command: npm run test:integration
