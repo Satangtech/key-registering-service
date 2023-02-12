@@ -3,11 +3,12 @@ version: '3'
 services:
 
   key-regis:
-    build: .
+    image: satangtech/key-regis:0.0.1
     stdin_open: true
     tty: true
     volumes:
       - ./.env:/app/.env
+      - ./privkey.ts:/app/privkey.ts
     depends_on:
       - mongo
       - firovm
