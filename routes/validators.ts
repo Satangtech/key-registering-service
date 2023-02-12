@@ -54,7 +54,8 @@ router.get("/:id", async (req: Request, res: Response) => {
 
 router.post("/", async (req: Request, res: Response) => {
   try {
-    const { id, publickey } = req.body;
+    let { id, publickey } = req.body;
+    publickey = publickey.replace("0x", "");
     const checkId = await Validator.findOne({ id }).select({
       _id: 0,
       __v: 0,
@@ -99,6 +100,10 @@ router.put("/:id", async (req: Request, res: Response) => {
     if (id === undefined || banned === undefined) {
       return res.status(400).json({ error: "Id and banned is required!" });
     }
+    const validator = await Validator.findOne({ id });
+    if (!validator) {
+      return res.status(404).json({ error: "Validator not found" });
+    }
 
     if (banned) {
       txid = await banValidator(id);
@@ -127,13 +132,8 @@ router.delete("/:id", async (req: Request, res: Response) => {
     if (!validator) {
       return res.status(404).json({ error: "Validator not found" });
     }
-
-    return res.json({
-      id,
-      publickey: validator.publickey,
-      status: "deleted",
-      msg: "API for deleting validator is not implemented yet",
-    });
+    console.log("API for deleting validator is not implemented yet");
+    return res.status(204).json({}); // 204 No Content
   } catch (error) {
     return res.status(500).json({ error: (<any>error).message });
   }

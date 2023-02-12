@@ -1,7 +1,7 @@
 import cors from "cors";
 import "dotenv/config";
 import express, { Express } from "express";
-import { connect } from "mongoose";
+import { connect, set } from "mongoose";
 import { routerStatus, routerValidators } from "./routes";
 
 const PORT = Number(process.env.PORT) || 3000;
@@ -16,6 +16,7 @@ app.use("/v1/status", routerStatus);
 app.use("/v1/validators", routerValidators);
 
 app.listen(PORT, BIND, async () => {
+  set("strictQuery", false);
   await connect(MONGODB_URL!);
   console.log(`[server]: Server is running at ${BIND}:${PORT}`);
 });

@@ -1,59 +1,15 @@
-export const abiMobileValidator = [
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "bytes32",
-        name: "validatorId",
-        type: "bytes32",
-      },
-      {
-        indexed: false,
-        internalType: "bytes",
-        name: "publicKey",
-        type: "bytes",
-      },
-    ],
-    name: "AddValidator",
-    type: "event",
-  },
+export const abiPOAGovernance = [
   {
     anonymous: false,
     inputs: [
       {
         indexed: false,
         internalType: "uint256",
-        name: "validatorProposalID",
+        name: "minerProposalID",
         type: "uint256",
       },
     ],
-    name: "AddValidatorProposal",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "bytes32",
-        name: "validatorId",
-        type: "bytes32",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "banerAdmin",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "timestamp",
-        type: "uint256",
-      },
-    ],
-    name: "BanValidator",
+    name: "AddMinerProposal",
     type: "event",
   },
   {
@@ -62,7 +18,7 @@ export const abiMobileValidator = [
       {
         indexed: true,
         internalType: "uint256",
-        name: "validatorProposalID",
+        name: "minerProposalID",
         type: "uint256",
       },
       {
@@ -73,7 +29,7 @@ export const abiMobileValidator = [
       },
       {
         indexed: false,
-        internalType: "enum MobileValidator.VoteType",
+        internalType: "enum POAGovernance.VoteType",
         name: "voteType",
         type: "uint8",
       },
@@ -84,7 +40,7 @@ export const abiMobileValidator = [
         type: "uint256",
       },
     ],
-    name: "CastProposalVote",
+    name: "CastMinerVote",
     type: "event",
   },
   {
@@ -93,14 +49,14 @@ export const abiMobileValidator = [
       {
         indexed: true,
         internalType: "uint256",
-        name: "validatorProposalID",
+        name: "minerProposalID",
         type: "uint256",
       },
       {
         indexed: false,
-        internalType: "bytes32",
-        name: "rejectedValidatorID",
-        type: "bytes32",
+        internalType: "address",
+        name: "rejectedMinerAddress",
+        type: "address",
       },
       {
         indexed: false,
@@ -109,7 +65,7 @@ export const abiMobileValidator = [
         type: "uint256",
       },
     ],
-    name: "ProposalVoteFailed",
+    name: "MinerVoteFailed",
     type: "event",
   },
   {
@@ -118,14 +74,14 @@ export const abiMobileValidator = [
       {
         indexed: true,
         internalType: "uint256",
-        name: "validatorProposalID",
+        name: "minerProposalID",
         type: "uint256",
       },
       {
         indexed: false,
-        internalType: "bytes32",
-        name: "validatorID",
-        type: "bytes32",
+        internalType: "address",
+        name: "addedMinerAddress",
+        type: "address",
       },
       {
         indexed: false,
@@ -134,7 +90,7 @@ export const abiMobileValidator = [
         type: "uint256",
       },
     ],
-    name: "ProposalVoteSucceeded",
+    name: "MinerVoteSucceeded",
     type: "event",
   },
   {
@@ -217,58 +173,8 @@ export const abiMobileValidator = [
     inputs: [
       {
         indexed: false,
-        internalType: "bytes32",
-        name: "validatorId",
-        type: "bytes32",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "unbanerAdmin",
-        type: "address",
-      },
-      {
-        indexed: false,
         internalType: "uint256",
-        name: "timestamp",
-        type: "uint256",
-      },
-    ],
-    name: "UnbanValidator",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "previousVotingPeriod",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "updatedVotingPeriod",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "adminAddress",
-        type: "address",
-      },
-    ],
-    name: "UpdateTimeStamp",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "validatorProposalID",
+        name: "minerProposalID",
         type: "uint256",
       },
     ],
@@ -306,6 +212,20 @@ export const abiMobileValidator = [
   {
     inputs: [],
     name: "GOV_ROLE",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+    constant: true,
+  },
+  {
+    inputs: [],
+    name: "MINER_ROLE",
     outputs: [
       {
         internalType: "bytes32",
@@ -382,7 +302,7 @@ export const abiMobileValidator = [
   },
   {
     inputs: [],
-    name: "minMobileValidators",
+    name: "minUTXOs",
     outputs: [
       {
         internalType: "uint256",
@@ -451,13 +371,19 @@ export const abiMobileValidator = [
     constant: true,
   },
   {
-    inputs: [],
-    name: "totalActiveMobileValidators",
-    outputs: [
+    inputs: [
       {
         internalType: "uint256",
-        name: "",
+        name: "minerProposalID",
         type: "uint256",
+      },
+    ],
+    name: "checkIfMinerProposalIdExist",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
       },
     ],
     stateMutability: "view",
@@ -465,13 +391,19 @@ export const abiMobileValidator = [
     constant: true,
   },
   {
-    inputs: [],
-    name: "waitingBlock",
+    inputs: [
+      {
+        internalType: "address",
+        name: "addressToCheck",
+        type: "address",
+      },
+    ],
+    name: "isGovAndAdminAddress",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "bool",
         name: "",
-        type: "uint256",
+        type: "bool",
       },
     ],
     stateMutability: "view",
@@ -487,6 +419,39 @@ export const abiMobileValidator = [
       },
     ],
     name: "setDGPContract",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "addressToCheck",
+        type: "address",
+      },
+    ],
+    name: "isMiner",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+    constant: true,
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "newMinUTXOs",
+        type: "uint256",
+      },
+    ],
+    name: "updateMinUTXOs",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -520,89 +485,8 @@ export const abiMobileValidator = [
     constant: true,
   },
   {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "newMinMobileValidator",
-        type: "uint256",
-      },
-    ],
-    name: "changeMinMobileValidator",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "validatorID",
-        type: "bytes32",
-      },
-    ],
-    name: "isValidator",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-    constant: true,
-  },
-  {
     inputs: [],
-    name: "status",
-    outputs: [
-      {
-        internalType: "enum MobileValidator.ValidatorFeatureStatus",
-        name: "",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-    constant: true,
-  },
-  {
-    inputs: [],
-    name: "changeToPrepared",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "changeToEnabled",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "changeFromPreparedToDisable",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "changeFromEnabledToDisable",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "validatorID",
-        type: "bytes32",
-      },
-    ],
-    name: "isBanned",
+    name: "enabled",
     outputs: [
       {
         internalType: "bool",
@@ -669,14 +553,26 @@ export const abiMobileValidator = [
   {
     inputs: [
       {
-        internalType: "bytes32",
-        name: "validatorID",
-        type: "bytes32",
+        internalType: "address",
+        name: "_minerAddress",
+        type: "address",
       },
       {
-        internalType: "bytes",
-        name: "publicKey",
-        type: "bytes",
+        components: [
+          {
+            internalType: "uint256",
+            name: "index",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "txId",
+            type: "string",
+          },
+        ],
+        internalType: "struct POAGovernance.UTXO[]",
+        name: "_newUTXOs",
+        type: "tuple[]",
       },
       {
         internalType: "bool",
@@ -684,7 +580,7 @@ export const abiMobileValidator = [
         type: "bool",
       },
     ],
-    name: "proposeValidator",
+    name: "proposeMiner",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -713,36 +609,11 @@ export const abiMobileValidator = [
     inputs: [
       {
         internalType: "uint256",
-        name: "_validatorProposalID",
+        name: "minerProposalID",
         type: "uint256",
       },
     ],
-    name: "getProposedValidator",
-    outputs: [
-      {
-        internalType: "bytes32",
-        name: "validatorID",
-        type: "bytes32",
-      },
-      {
-        internalType: "bytes",
-        name: "publicKey",
-        type: "bytes",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-    constant: true,
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_validatorProposalID",
-        type: "uint256",
-      },
-    ],
-    name: "getValidatorProposalDetails",
+    name: "getMinerProposalDetails",
     outputs: [
       {
         internalType: "address",
@@ -755,8 +626,8 @@ export const abiMobileValidator = [
         type: "uint256",
       },
       {
-        internalType: "enum MobileValidator.Status",
-        name: "votingstatus",
+        internalType: "enum POAGovernance.Status",
+        name: "status",
         type: "uint8",
       },
       {
@@ -774,6 +645,11 @@ export const abiMobileValidator = [
         name: "abstainVotes",
         type: "uint256",
       },
+      {
+        internalType: "address",
+        name: "minerAddress",
+        type: "address",
+      },
     ],
     stateMutability: "view",
     type: "function",
@@ -782,21 +658,8 @@ export const abiMobileValidator = [
   {
     inputs: [
       {
-        internalType: "uint128",
-        name: "updatedTime",
-        type: "uint128",
-      },
-    ],
-    name: "updateVotingPeriod",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
         internalType: "uint256",
-        name: "validatorProposalID",
+        name: "minerProposalID",
         type: "uint256",
       },
       {
@@ -814,7 +677,7 @@ export const abiMobileValidator = [
     inputs: [
       {
         internalType: "uint256",
-        name: "validatorProposalID",
+        name: "minerProposalID",
         type: "uint256",
       },
     ],
@@ -827,7 +690,7 @@ export const abiMobileValidator = [
     inputs: [
       {
         internalType: "uint256",
-        name: "validatorProposalID",
+        name: "minerProposalID",
         type: "uint256",
       },
     ],
@@ -840,7 +703,7 @@ export const abiMobileValidator = [
     inputs: [
       {
         internalType: "uint256",
-        name: "validatorProposalID",
+        name: "minerProposalID",
         type: "uint256",
       },
     ],
@@ -853,7 +716,7 @@ export const abiMobileValidator = [
     inputs: [
       {
         internalType: "uint256",
-        name: "validatorProposalID",
+        name: "minerProposalID",
         type: "uint256",
       },
     ],
@@ -871,43 +734,202 @@ export const abiMobileValidator = [
   {
     inputs: [
       {
-        internalType: "bytes32",
-        name: "validatorID",
-        type: "bytes32",
+        components: [
+          {
+            internalType: "uint256",
+            name: "index",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "txId",
+            type: "string",
+          },
+        ],
+        internalType: "struct POAGovernance.UTXO",
+        name: "utxo1",
+        type: "tuple",
       },
-    ],
-    name: "banValidator",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
       {
-        internalType: "bytes32",
-        name: "validatorID",
-        type: "bytes32",
+        components: [
+          {
+            internalType: "uint256",
+            name: "index",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "txId",
+            type: "string",
+          },
+        ],
+        internalType: "struct POAGovernance.UTXO",
+        name: "utxo2",
+        type: "tuple",
       },
     ],
-    name: "unbanValidator",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "validatorID",
-        type: "bytes32",
-      },
-    ],
-    name: "getValidatorPubKey",
+    name: "checkTwoUTXOEquality",
     outputs: [
       {
-        internalType: "bytes",
+        internalType: "bool",
         name: "",
-        type: "bytes",
+        type: "bool",
+      },
+    ],
+    stateMutability: "pure",
+    type: "function",
+    constant: true,
+  },
+  {
+    inputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "index",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "txId",
+            type: "string",
+          },
+        ],
+        internalType: "struct POAGovernance.UTXO[]",
+        name: "utxos",
+        type: "tuple[]",
+      },
+    ],
+    name: "removeUTXOs",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "minerAddress",
+        type: "address",
+      },
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "index",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "txId",
+            type: "string",
+          },
+        ],
+        internalType: "struct POAGovernance.UTXO",
+        name: "utxoToReplace",
+        type: "tuple",
+      },
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "index",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "txId",
+            type: "string",
+          },
+        ],
+        internalType: "struct POAGovernance.UTXO",
+        name: "newUTXO",
+        type: "tuple",
+      },
+    ],
+    name: "update",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "minerAddress",
+        type: "address",
+      },
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "index",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "txId",
+            type: "string",
+          },
+        ],
+        internalType: "struct POAGovernance.UTXO",
+        name: "utxoToReplace",
+        type: "tuple",
+      },
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "index",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "txId",
+            type: "string",
+          },
+        ],
+        internalType: "struct POAGovernance.UTXO",
+        name: "newUTXO",
+        type: "tuple",
+      },
+    ],
+    name: "updateWithAddress",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "minerAddress",
+        type: "address",
+      },
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "index",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "txId",
+            type: "string",
+          },
+        ],
+        internalType: "struct POAGovernance.UTXO",
+        name: "utxo",
+        type: "tuple",
+      },
+    ],
+    name: "usable",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
       },
     ],
     stateMutability: "view",

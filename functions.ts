@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { Client, Context, PrivkeyAccount, RPCClient } from "firovm-sdk";
-import { abi } from "./abi/mobileValidator";
+import { abiMobileValidator } from "./abi/mobileValidator";
 import { ProposalStatus } from "./models";
 import { privkeys } from "./privkey";
 import { getNetwork } from "./utils";
@@ -26,7 +26,7 @@ export const getBalances = async () => {
 
 export const getHexIdAndBytesPubkey = (id: string, publickey: string) => {
   const idHex = client.web3.utils.asciiToHex(id);
-  const pubkeyBytes = Buffer.from(publickey, "hex");
+  const pubkeyBytes = Buffer.from(publickey.replace("0x", ""), "hex");
   return { idHex, pubkeyBytes };
 };
 
@@ -43,7 +43,7 @@ export const getValidatorProposalId = (
 };
 
 export const getContractMobileValidator = () => {
-  return new client.Contract(abi, CONTRACT!);
+  return new client.Contract(abiMobileValidator, CONTRACT!);
 };
 
 export const sendProposalValidator = async (

@@ -6,7 +6,6 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/server.js",
-    "test": "jest",
     "test:integration": "jest --runInBand test-integration",
     "test:logs": "docker compose -f docker-compose.test.yml logs -f key-regis",
     "test:up": "tar xvf firovm.tar && docker compose -f docker-compose.test.yml up -d --build key-regis && npm run test:logs",

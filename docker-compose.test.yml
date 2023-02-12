@@ -27,6 +27,4 @@ services:
 
   it-test:
     build: .
-    stdin_open: true
-    tty: true
     command: npm run test:integration
