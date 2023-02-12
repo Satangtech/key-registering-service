@@ -4,3 +4,6 @@ dist/
 .vscode/
 privkey.ts
 .mongo
+
+firovm.tar
+.firovm
