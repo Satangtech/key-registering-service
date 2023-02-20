@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+
+  key-regis:
+    image: satangtech/key-regis:0.0.1
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./.env:/app/.env
+      - ./privkey.ts:/app/privkey.ts
+    depends_on:
+      - mongo
+      - firovm
+
+  mongo:
+    image: mongo:5
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root-user
+      - MONGO_INITDB_ROOT_PASSWORD=root-pass
+      - MONGO_INITDB_DATABASE=key-register
+    volumes:
+      - ./mongo-init-user.js:/docker-entrypoint-initdb.d/mongo-init-user.js:ro
+
+  firovm:
+    image: satangtech/firovm-poa:2b225f0791ebb560d299780364965254cace247f
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./.firovm:/firovm
+    ports:
+      - 1234:1234
+      - 11000:11000
+
+  it-test:
+    build: .
+    command: npm run test:integration

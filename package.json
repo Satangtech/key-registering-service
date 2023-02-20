@@ -6,7 +6,11 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/server.js",
-    "test": "jest",
+    "test:integration": "jest --runInBand test-integration",
+    "test:logs": "docker compose -f docker-compose.test.yml logs -f key-regis",
+    "test:up": "tar xvf firovm.tar && docker compose -f docker-compose.test.yml up -d --build key-regis && npm run test:logs",
+    "test:it": "docker compose -f docker-compose.test.yml up --build it-test",
+    "test:down": "rm -rf .firovm && docker compose -f docker-compose.test.yml down",
     "debug": "node --trace-warnings --inspect-brk=0.0.0.0:9229 dist/server.js --DEBUG true",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\""
   },
@@ -17,7 +21,7 @@
     "cors": "^2.8.5",
     "express": "^4.18.1",
     "express-basic-auth": "^1.2.1",
-    "firovm-sdk": "0.0.6-alpha",
+    "firovm-sdk": "0.0.12-alpha",
     "mongoose": "^6.6.0"
   },
   "devDependencies": {
@@ -25,10 +29,12 @@
     "@types/express": "^4.17.13",
     "@types/jest": "^29.0.3",
     "@types/node": "^17.0.40",
+    "@types/node-fetch": "^2.6.2",
     "@types/supertest": "^2.0.12",
     "concurrently": "^7.2.1",
     "dotenv": "^16.0.1",
     "jest": "^29.0.3",
+    "node-fetch": "^2.6.9",
     "nodemon": "^2.0.16",
     "prettier": "^2.6.2",
     "prettier-plugin-organize-imports": "^3.1.1",

@@ -1,10 +1,9 @@
 import "dotenv/config";
 import { Client, Context, PrivkeyAccount, RPCClient } from "firovm-sdk";
+import { abiMobileValidator } from "./abi/mobileValidator";
+import { ProposalStatus } from "./models";
 import { privkeys } from "./privkey";
 import { getNetwork } from "./utils";
-
-import abiMobileValidator from "./abi/mobileValidator.json";
-import { ProposalStatus } from "./models";
 
 const RPC_URL = process.env.RPC_URL;
 export const NETWORK = process.env.NETWORK || "regtest";
@@ -27,7 +26,7 @@ export const getBalances = async () => {
 
 export const getHexIdAndBytesPubkey = (id: string, publickey: string) => {
   const idHex = client.web3.utils.asciiToHex(id);
-  const pubkeyBytes = Buffer.from(publickey, "hex");
+  const pubkeyBytes = Buffer.from(publickey.replace("0x", ""), "hex");
   return { idHex, pubkeyBytes };
 };
 

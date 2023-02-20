@@ -1,15 +1,15 @@
 # key-registering-service
 
-- Create file and correct data `app/.env` and `app/privkey.ts`
+- Create file and correct data `.env` and `privkey.ts`
 
   - Copy file example
 
   ```bash
-  cp app/.env.example app/.env
-  cp app/privkey.example.ts app/privkey.ts
+  cp .env.example .env
+  cp privkey.example.ts privkey.ts
   ```
 
-  - Config file `app/.env` and `app/privkey.ts`
+  - Config file `.env` and `privkey.ts`
 
     File `.env`
 
@@ -36,5 +36,17 @@
 - Run Test
 
   ```bash
-  docker compose exec key-registry-service bash -c "MONGODB_URL_TEST=mongodb://mongo:27017/key-register-test npm test"
+  # Download file firovm.tar
+  bash checksum_verification.sh
+  ```
+
+  ```bash
+  # terminal 1
+  npm run test:up
+
+  # wait terminal 1 run success then run terminal 2
+  npm run test:it
+
+  # down test
+  npm run test:down
   ```

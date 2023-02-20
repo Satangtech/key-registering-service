@@ -2,22 +2,20 @@ version: '3'
 
 services:
   key-registry-service:
-    build: .
+    image: satangtech/key-regis:0.0.1
     restart: always
-    command: bash -c "npm i && npx tsc && npm run start"
     stdin_open: true
     tty: true
     volumes:
-      - ./app:/app
+      - ./.env:/app/.env
+      - ./privkey.ts:/app/privkey.ts
     ports:
       - 3000:3000
-      - 9229:9229
     depends_on:
       - mongo
 
   mongo:
-    container_name: mongo
-    image: mongo:5.0
+    image: mongo:5
     ports:
       - 27017:27017
     volumes:
