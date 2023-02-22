@@ -1,18 +1,23 @@
-FROM node:16
+FROM node:16 as builder
 
-RUN useradd -ms /bin/bash keyregis
-
-USER keyregis
 WORKDIR /app
-RUN chown -R keyregis:keyregis /app
 
-COPY --chown=keyregis:keyregis ./package*.json ./
+COPY ./package*.json ./
 
 RUN npm install
 
-COPY --chown=keyregis:keyregis . .
+COPY . .
 
 RUN npm run build
+
+FROM node:16
+
+RUN useradd -ms /bin/bash keyregis
+USER keyregis
+
+WORKDIR /app
+
+COPY --chown=keyregis:keyregis --from=builder /app .
 
 EXPOSE 3000 9229
 
