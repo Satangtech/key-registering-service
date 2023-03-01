@@ -33,20 +33,12 @@
   docker compose up -d
   ```
 
-- Run Test
+- Run Integration Test
 
   ```bash
-  # Download file firovm.tar
-  bash checksum_verification.sh
-  ```
-
-  ```bash
-  # terminal 1
-  npm run test:up
-
-  # wait terminal 1 run success then run terminal 2
+  # integration test
   npm run test:it
 
-  # down test
+  # down integration test
   npm run test:down
   ```

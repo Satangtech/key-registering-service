@@ -69,6 +69,14 @@ describe("Validator API", () => {
     expect(result.length).toBeGreaterThan(0);
   };
 
+  const waitForServer = async () => {
+    let res = await fetch(`${url}/v1/status`);
+    while (res.status !== 200) {
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      res = await fetch(`${url}/v1/status`);
+    }
+  };
+
   const initQtumGov = async () => {
     let txid = await qtumGovContract.methods.setInitialAdmin().send({
       from: account.acc1,
@@ -196,6 +204,7 @@ describe("Validator API", () => {
     await initQtumGov();
     await initPoaGov();
     await initMobileValidator();
+    await waitForServer();
   });
 
   beforeEach(async () => {

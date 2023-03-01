@@ -26,6 +26,7 @@ services:
     image: satangtech/firovm-poa:2b225f0791ebb560d299780364965254cace247f
     tty: true
     stdin_open: true
+    command: -connect=0
     volumes:
       - ./.firovm:/firovm
     ports:
@@ -35,3 +36,5 @@ services:
   it-test:
     build: .
     command: npm run test:integration
+    depends_on:
+      - key-regis

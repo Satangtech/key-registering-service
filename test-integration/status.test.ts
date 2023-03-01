@@ -25,10 +25,6 @@ describe("Status API", () => {
     acc5: new PrivkeyAccount(context, privkey.testPrivkey5),
   };
 
-  const loadWallet = async () => {
-    await rpcClient.rpc("loadwallet", ["testwallet"]);
-  };
-
   const generateToAddress = async () => {
     const { result } = await rpcClient.rpc("generatetoaddress", [
       1,
@@ -37,8 +33,16 @@ describe("Status API", () => {
     expect(result.length).toBeGreaterThan(0);
   };
 
+  const waitForServer = async () => {
+    let res = await fetch(`${url}/v1/status`);
+    while (res.status !== 200) {
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      res = await fetch(`${url}/v1/status`);
+    }
+  };
+
   beforeAll(async () => {
-    await loadWallet();
+    await waitForServer();
   });
 
   test("GET /v1/status", async () => {
